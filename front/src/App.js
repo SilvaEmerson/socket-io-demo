@@ -4,7 +4,7 @@ import io from "socket.io-client";
 
 function App() {
   const [conn] = useState(() => {
-    return io("https://test.api.pedeaivai.com.br", {
+    return io("http://$URL", {
         transports: ['websocket'],
     });
   });
