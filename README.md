@@ -2,10 +2,10 @@
 
 # Instructions
 
-* Change `$URL` at `/front`.
+* Change `$URL` at `/front/src/App.js`.
 
 * To add new messages interactivily on UI: 
 
 ```shell
-curl -X POST -H "Content-Type: application/json" -d '{"message": "Hello World"}' http://localhost:3001/demo
+curl -X POST -H "Content-Type: application/json" -d '{"message": "Hello World"}' https://$URL/demo
 ```

@@ -4,7 +4,7 @@ import io from "socket.io-client";
 
 function App() {
   const [conn] = useState(() => {
-    return io("http://$URL", {
+    return io("https://$URL", {
         transports: ['websocket'],
     });
   });
