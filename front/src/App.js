@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import io from "socket.io-client";
 
-function App() {
+const ChatWiddget = props => {
   const [conn] = useState(() => {
-    return io("https://$URL", {
-        transports: ['websocket'],
-    });
+    return io("http://localhost:3001");
   });
 
   const [messages, setMessages] = useState([]);
+  const [currMessage, setCurrMessage] = useState([]);
   const [roomId, setRoomId] = useState();
 
   useEffect(() => {
@@ -25,21 +24,46 @@ function App() {
   }, [conn]);
 
   useEffect(() => {
-    conn.emit("room", { roomId: roomId });
-  }, [roomId]);
+    conn.emit("room", { roomId: 1 });
+  }, []);
+
+  const sendMessage = () => {
+      currMessage &&
+      conn.emit("send-message", { destinyRoom: 1, message: currMessage });
+
+    setCurrMessage(curr => "");
+  }
+
+  return (
+    <div className="chat-widdget">
+      {messages.map((msg, ind) => (
+        <span key={ind}> {msg.message} </span>
+      ))}
+      <div>
+        <input
+          style={{ marginTop: "auto" }}
+          onChange={ev => setCurrMessage(ev.target.value)}
+        ></input>
+        <button onClick={ev => sendMessage()}>OK</button>
+      </div>
+    </div>
+  );
+};
+
+function App() {
+  const [chatOpen, setChatOpen] = useState(false);
 
   return (
     <div className="App">
-      <input
-        type="text"
-        onChange={ev => {
-          console.log(ev.target.value);
-          setRoomId(ev.target.value);
-        }}
-      ></input>
-      {messages.map((el, ind) => (
-        <ul key={ind}>{el.message}</ul>
-      ))}
+      <div className="App">
+        {chatOpen && <ChatWiddget />}
+        <div className="chat-container">
+          <div
+            className="chat-btn"
+            onClick={() => setChatOpen(val => !val)}
+          ></div>
+        </div>
+      </div>
     </div>
   );
 }

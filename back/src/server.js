@@ -35,9 +35,16 @@ io.on("connection", function(socket) {
   socket.emit("message-channel", { message: "Hello" }, () => {
     console.log("Message received by client");
   });
-   socket.on("room", function(data) {
-     socket.join(data.roomId);
-   });
+  socket
+    .on("room", function(data) {
+      socket.join(data.roomId);
+    })
+    .on("send-message", function(data) {
+      console.log(data);
+      io.sockets
+        .in(data.destinyRoom)
+        .emit("message-channel", { message: data.message });
+    });
 });
 
 server.listen(3001);
